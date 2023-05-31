@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Leaflet Map with Drawing Tools</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+  <style>
+    #map {
+      height: 400px;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script>
+    var map = L.map('map').setView([51.505, -0.09], 13); // Set your desired initial coordinates and zoom level
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+      maxZoom: 18
+    }).addTo(map);
+
+    // Add drawing tools control
+    var drawnItems = new L.FeatureGroup();
+    map.addLayer(drawnItems);
+
+    var drawControl = new L.Control.Draw({
+      draw: {
+        polygon: true,
+        marker: true,
+        circle: false, // Disable circles
+        rectangle: false // Disable rectangles
+        // Add other available options as needed
+      },
+      edit: {
+        featureGroup: drawnItems
+      }
+    });
+    map.addControl(drawControl);
+
+    map.on('draw:created', function(e) {
+      var layer = e.layer;
+      drawnItems.addLayer(layer);
+    });
+  </script>
+</body>
+</html>

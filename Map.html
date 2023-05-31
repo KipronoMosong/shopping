@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Shopify</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles/reset.min.css" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" href="styles/header-3.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+<link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+	<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    
+  </head>
+  <style>
+    .site-header{
+      background-color: green;
+    }
+    
+.logo_text{
+  font-size: 15px;
+          margin-top:35px;
+              font-weight: 900;
+                      font-family:serif; 
+                      color:black;
+                      }
+
+
+                      body {
+                        font-family: 'Open Sans', sans-serif;
+                    }
+                    
+                    .menu, .drop-menu {
+                        list-style-type: none;
+                        padding: 0;
+                        margin: 0;
+                    }
+                    
+                    .menu-item {
+                        display: inline-block;
+                        position: relative;
+                    }
+                    
+                    .menu-item a {
+                        text-decoration: none;
+                        padding: 6px 10px;
+                        color: #fff;
+                        display: block;
+                    }
+                    
+                    .drop-menu {
+                        display: none;
+                        position: absolute;
+                        background-color: #ff0000;
+                        min-width: 100px;
+                        box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+                    }
+                    
+                    .drop-menu-item {
+                        width: 100%;
+                    }
+                    
+                    .drop-menu-item:hover {
+                        background-color: #ff0909;
+                    }
+                    
+                    .drop-menu-item a {
+                        color: #555;
+                    }
+                    
+                    .menu-item:hover .drop-menu {
+                        display: block;
+                    }
+                    
+  .logo_text{
+    font-size: large;
+          margin-top:50px;
+              font-weight: 900;
+                      font-family:serif; 
+                      color:black;
+                      }
+    .Generation_grahs{
+    position:absolute;
+    margin-top:340px;
+    margin-right:7000px;
+    width:640px;
+    
+    }
+    .container{
+    position:absolute;
+    margin-top:0px;
+    margin-left:0px;
+    
+    }
+    
+    .split {
+    height: 90%;
+    
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+    }
+    
+    .right {
+    right: 0;
+    background-color: green;
+    margin-top:85px;
+    width: 45%;
+    }
+    .leftsidebar{
+        background-color: white;
+        height: 640px;
+        width: 16%;
+        }
+        .rightsidebar{
+            background-color: none;
+            height: 640px;
+            width: 84%;
+            float: right;
+            z-index: 0; /* Set the z-index of the map */
+            
+            }
+            .header {
+                overflow: hidden;
+                background-color: green;
+                padding: 20px 10px;
+                height: 30px;
+                /* color: darkgray; */
+              }
+
+
+
+           
+         
+         
+            
+            .inputBox{
+                width: 100%;
+                margin: 2px 0;
+                border-radius: 5px;
+                overflow: hidden;
+            }
+            
+
+            .inputBox textarea{
+                width: 100%;
+                height: 10px;
+                border-radius: 5px;
+                border: none;
+                outline: none;
+                overflow: hidden;
+                border: 1px solid rgba(0,0,0,0.2);
+                padding: 0px 10px;
+                font-size: 16px;
+                color: #444;
+            }
+            
+            .inputBox button{
+                width: 100%;    
+                padding: 10px 20px;
+                border: none;
+                outline: none;
+                background: rgb(0, 38, 255);
+                color: #FFF;
+                font-size: 20px;
+                font-weight: bold;
+                cursor: pointer;
+                
+            }
+            
+            .inputBox button:hover{
+                background: rgb(0, 17, 255);
+                transition: all 0.3s ease;
+            }
+            
+            ::placeholder{
+                font-size: 16px;
+            }
+            
+            .alert{
+                width: 100%;
+                background: rgb(0, 255, 106);
+                padding: 10px 20px;
+                border-radius: 5px;
+                text-align: center;
+                font-size: 18px;
+                font-weight: 900;
+                display: none;
+            }
+            .Extra{
+              font-weight: bold;
+              text-decoration: underline;
+            }
+  </style>
+  <body>
+    <!-- Header Start -->
+    <header class="site-header">
+      <div class="wrapper site-header__wrapper">
+        <div class="site-header__start">
+          <a href="#" class="brand">Ninja Tat!</a>
+        </div>
+        <div class="site-header__end">
+          <nav class="nav">
+            <button class="nav__toggle" aria-expanded="false" type="button">
+              menu
+            </button>
+            <ul class="nav__wrapper">
+              <li class="nav__item"><a href="#">Home</a></li>
+              <li class="nav__item"><a href="#">About</a></li>
+              <li class="nav__item"><a href="#">Services</a></li>
+              <li class="nav__item"><a href="read.html">Data Management</a></li>
+              <li class="nav__item"><a href="#">Log-Out</a></li>
+            </ul>
+          </nav>
+          <div class="search">
+            <button class="search__toggle" aria-label="Open search">
+              Search
+            </button>
+            <form class="search__form" action="">
+              <label class="sr-only" for="search">Search</label>
+              <input
+                type="search"
+                name=""
+                id="search"
+                placeholder="What's on your mind?"
+              />
+            </form>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- Header End -->
+    <div class="rightsidebar"> 
+
+      <div id="mapid" style="height: 855px;">
+
+      </div>
+  </div>
+
+
+  <div class ="leftsidebar">
+
+    <form id="contactForm">
+      <p class="Extra">Personal Information</p>
+<br>
+      <p>Client's Location:</p>
+      <label for="longitude">Longitude:</label>
+      <input type="text" name="longitude" id="longitude"><br>
+      <label for="latitude">Latitude:</label>
+      <input type="text" name="latitude" id="latitude"><br>
+  
+    
+  <form action="" id="contactForm">
+
+      <div class="inputBox">
+        <label for="longitude">Client's name:</label>
+        
+          <input type="text" id="name" placeholder="" />
+      </div>
+      <div class="inputBox">
+        <label for="longitude">Phone Number:</label>
+        <br>
+          <input type="Phone_Number" id="Phone_Number" placeholder="" />
+      </div>
+      <div class="inputBox">
+        <label for="longitude">Email:</label>
+          <input type="email" id="emailid" placeholder="" />
+      </div>
+
+      <div class="inputBox">
+        <label for="longitude">Facebook Link:</label>
+          <input type="Facebook" id="Facebook" placeholder="" />
+      </div>
+      <div class="inputBox">
+        <label for="longitude">Instagram Link:</label>
+        <br>
+          <input type="Instagram" id="Instagram" placeholder="" />
+      </div>
+
+      
+
+      <div class="inputBox">
+        <p>Image</p>
+        <input type="file" id="logo" name="image" accept="image/*">
+    </div>
+
+  
+      <div class="inputBox">
+          <button type="submit">Submit</button>
+      </div>
+      <div class="alert">Data Send!!</div>
+
+  </form>
+</div>
+
+
+  <script>
+  
+    button.onclick = function () {
+     var red = Math.floor(Math.random() * 256);
+     var blue = Math.floor(Math.random() * 256);
+     var green = Math.floor(Math.random() * 256);
+    
+     this.style.backgroundColor = "rgb(" + red + "," + green + "," + blue + ")";
+    };
+    </script>
+
+    <script>
+        var mymap = L.map('mapid').setView([39.96,-3.779], 7);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+            maxZoom: 18,
+            id: 'osm.streets'
+        }).addTo(mymap);
+
+        L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+			maxZoom: 20,
+			subdomains:['mt0','mt1','mt2','mt3'],
+			attribution: 'Map data &copy; <a href="https://www.google.com/maps">Google Maps</a>'
+		}).addTo(mymap);
+
+          // Add a marker
+        var x=51.5
+        var y=-0.09
+        var marker = L.marker([x, y]).addTo(mymap);
+
+        // Bind a popup to the marker
+        marker.bindPopup("<b>Hello!</b><br>This is a markefffffffyyffffnnnffr.").openPopup();
+
+    </script>
+
+
+    <script src="js/header-3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
+    <!-- <script src="./scripts.js"></script> -->
+  </body>
+</html>

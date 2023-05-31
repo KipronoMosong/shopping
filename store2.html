@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Leaflet Map with Firebase Data</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 400px;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-database.js"></script>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+	<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+
+
+  <script>
+    // Initialize Firebase
+    var firebaseConfig = {
+        apiKey: "AIzaSyD0asHo0qDj5zYplavVzFUsNWL1Da1e1c8",
+        authDomain: "sendinfo-9f1cb.firebaseapp.com",
+        databaseURL: "https://sendinfo-9f1cb-default-rtdb.firebaseio.com",
+        projectId: "sendinfo-9f1cb",
+        storageBucket: "sendinfo-9f1cb.appspot.com",
+        messagingSenderId: "842821060420",
+        appId: "1:842821060420:web:47008a44a86e78be69b911"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    // Create a Leaflet map
+    var map = L.map('map').setView([0, 0], 2);
+
+
+    L.Control.geocoder({
+			defaultMarkGeocode: false,
+			position: 'topleft',
+			placeholder: 'Search...',
+			collapsed: true,
+			showResultIcons: true,
+			showPopup: false
+		}).on('markgeocode', function(e) {
+			map.flyTo(e.geocode.center, 13);
+		}).addTo(map);
+    var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+      maxZoom: 18,
+    }).addTo(map);
+    // Create satellite imagery layer
+    var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Imagery &copy; <a href="https://www.arcgis.com/">ArcGIS</a>',
+      maxZoom: 18,
+    });
+
+    // Create Layer Groups
+    var markerGroup = L.layerGroup().addTo(map);
+
+    // Create Layers Control
+    var baseMaps = {
+      "OpenStreetMap": osmLayer,
+      "Satellite Imagery": satelliteLayer
+    }
+
+    L.control.layers(baseMaps).addTo(map);
+
+    
+
+    
+    // Add drawing tools control
+    var drawnItems = new L.FeatureGroup();
+    map.addLayer(drawnItems);
+
+    var drawControl = new L.Control.Draw({
+      draw: {
+        polygon: true,
+        marker: true,
+        circle: false, // Disable circles
+        rectangle: false // Disable rectangles
+        // Add other available options as needed
+      },
+      edit: {
+        featureGroup: drawnItems
+      }
+    });
+    map.addControl(drawControl);
+
+    map.on('draw:created', function(e) {
+      var layer = e.layer;
+      drawnItems.addLayer(layer);
+    });
+
+    // Firebase reference
+    var database = firebase.database().ref('contactForm');
+
+    // Read all data from Firebase
+    database.once('value', function (snapshot) {
+      snapshot.forEach(function (childSnapshot) {
+        var childData = childSnapshot.val();
+        var lat = childData.latitude;
+        var lng = childData.longitude;
+        var name = childData.name;
+        var emailid= childData.emailid;
+        var Phone_Number =childData.Phone_Number;
+        var Facebook= childData.Facebook;
+        var Instagram=childData.Instagram;
+        var file=childData.file;
+
+
+        // Add marker with bindPopup
+        L.marker([lat, lng]).addTo(map)
+          .bindPopup('<h3>'+ name + '</h3><p>' + emailid + '</p><p>' + Phone_Number + '</p><p><a href="' + 
+            Facebook + '">' + Facebook + '</a></p><p><a href="' + Instagram + '">' + Instagram + '</a></p><img src="' + file + '" alt="Marker Image" style="max-width: 200px; height: auto;">');
+     });
+    });
+
+
+    
+  </script>
+</body>
+</html>
